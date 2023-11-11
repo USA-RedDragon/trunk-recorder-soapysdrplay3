@@ -1,4 +1,4 @@
-FROM ghcr.io/usa-reddragon/trunk-recorder:soapysdrplay3 as base
+FROM ghcr.io/usa-reddragon/trunk-recorder:soapysdrplay3@sha256:017ca06b165f45bd00b31b987f1fb61c905d5a3a79de0d869bbc84d4e4912130 as base
 
 RUN curl -fSsL https://www.sdrplay.com/software/SDRplay_RSP_API-Linux-3.07.1.run -o /tmp/sdrplay.run && \
     mkdir -p /tmp/sdrplay && \

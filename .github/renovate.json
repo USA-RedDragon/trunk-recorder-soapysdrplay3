@@ -11,7 +11,7 @@
             "matchStrings": [
                 "# renovate: datasource=(?<datasource>.*?)(?:\\s+extractVersion=(?<extractVersion>.+?))?(?:\\s+versioning=(?<versioning>.+?))?\\s+depName=(?<depName>.+?)?\\s(?:\\s+.*_TAG[:=]\\s*(?<currentValue>.*))?(?:\\s.*_(?:ref|REF):\\s+(?<currentDigest>.*))?"
             ],
-            "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
+            "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver-coerced{{/if}}"
         },
         {
             "fileMatch": [
@@ -20,7 +20,7 @@
             "matchStrings": [
                 "# renovate: datasource=(?<datasource>.*?)(?:\\s+extractVersion=(?<extractVersion>.+?))?(?:\\s+versioning=(?<versioning>.+?))?\\s+depName=(?<depName>.+?)?\\s(?:\\s*.*_(?:version|VERSION)[:=]\\s*(?<currentValue>.*))?(?:\\s.*_(?:ref|REF):\\s+(?<currentDigest>.*))?"
             ],
-            "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
+            "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver-coerced{{/if}}"
         }
     ]
 }

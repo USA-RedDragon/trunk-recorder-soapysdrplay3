@@ -173,5 +173,4 @@ __DOCKER__EOF__
 
 ENV S6_CMD_RECEIVE_SIGNALS=1
 
-CMD ["/init"]
 ENTRYPOINT ["/init"]

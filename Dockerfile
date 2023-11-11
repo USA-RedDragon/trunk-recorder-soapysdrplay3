@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ghcr.io/usa-reddragon/trunk-recorder:main@sha256:bc831c286783e92b7e5cfbceeca94e3965f12ed1d6c61c7665080023b8ae6633
+ARG BASE_IMAGE=robotastic/trunk-recorder:4.6.0@sha256:916d40611a1310a53159ede0e34c1dde0b907c9306aea07d5aa875eda9b983e6
 FROM ${BASE_IMAGE}
 
 ARG TARGETPLATFORM

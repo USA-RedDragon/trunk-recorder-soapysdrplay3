@@ -1,6 +1,6 @@
 # Trunk Recorder with SoapySDRPlay3
 
-These are images of [robotastic/trunk-recorder](https://github.com/robotastic/trunk-recorder) builds with the [pothosware/SoapySDRPlay3](https://github.com/pothosware/SoapySDRPlay3) library installed along with the [SDRPlay API v3.07](https://www.sdrplay.com/api/). These builds are `amd64` only for now.
+These are images of [robotastic/trunk-recorder](https://github.com/robotastic/trunk-recorder) builds with the [pothosware/SoapySDRPlay3](https://github.com/pothosware/SoapySDRPlay3) library installed along with the [SDRPlay API v3.07](https://www.sdrplay.com/api/).
 
 ## Fork note
 

@@ -1,15 +1,51 @@
-FROM ghcr.io/usa-reddragon/trunk-recorder:main@sha256:bc831c286783e92b7e5cfbceeca94e3965f12ed1d6c61c7665080023b8ae6633 as base
+ARG BASE_IMAGE=ghcr.io/usa-reddragon/trunk-recorder:main@sha256:bc831c286783e92b7e5cfbceeca94e3965f12ed1d6c61c7665080023b8ae6633
+FROM ${BASE_IMAGE}
 
-RUN curl -fSsL https://www.sdrplay.com/software/SDRplay_RSP_API-Linux-3.07.1.run -o /tmp/sdrplay.run && \
+ARG TARGETPLATFORM
+ARG TARGETARCH
+
+# https://www.sdrplay.com/software/SDRplay_RSP_API-ARM32-3.07.2.run ./armv7l
+# https://www.sdrplay.com/software/SDRplay_RSP_API-ARM64-3.07.1.run ./aarch64
+# https://www.sdrplay.com/software/SDRplay_RSP_API-Linux-3.07.1.run ./x86_64
+
+RUN PLATFORM=$(echo ${TARGETPLATFORM} | awk -F/ '{print $1}') && \
+    case ${PLATFORM} in \
+        linux) \
+            echo "Building for linux" \
+            ;; \
+        *) \
+            echo "Unknown platform: ${PLATFORM}" \
+            exit 1 \
+            ;; \
+    esac && \
+    DOCKER_ARCH=$(echo ${TARGETPLATFORM} | awk -F/ '{print $2}') && \
+    case ${DOCKER_ARCH} in \
+        amd64) \
+            _sdrplay_arch_version="Linux-3.07.1" \
+            _sdrplay_arch="x86_64" \
+            ;; \
+        arm64) \
+            _sdrplay_arch_version="ARM64-3.07.1" \
+            _sdrplay_arch="aarch64" \
+            ;; \
+        arm) \
+            _sdrplay_arch_version="ARM32-3.07.2" \
+            _sdrplay_arch="armv7l" \
+            ;; \
+        *) \
+            echo "Unknown docker arch: ${DOCKER_ARCH}" \
+            exit 1 \
+            ;; \
+    esac && \
+    curl -fSsL https://www.sdrplay.com/software/SDRplay_RSP_API-${_sdrplay_arch_version}.run -o /tmp/sdrplay.run && \
     mkdir -p /tmp/sdrplay && \
     cd /tmp/sdrplay && \
     chmod a+x /tmp/sdrplay.run && \
     /tmp/sdrplay.run --tar xf && \
-    ls -lah && \
-    _apivers=$(sed -n 's/^VERS="\(.*\)"/\1/p' install_lib.sh) && \
+    _apivers=$(sed -n 's/^\(export \)\{0,1\}VERS="\(.*\)"/\2/p' install_lib.sh) && \
     install -D -m644 sdrplay_license.txt /usr/share/licenses/libsdrplay/LICENSE && \
-    install -D -m644 "x86_64/libsdrplay_api.so.${_apivers}" "/usr/lib/libsdrplay_api.so.${_apivers}" && \
-    install -D -m755 x86_64/sdrplay_apiService /usr/bin/sdrplay_apiService && \
+    install -D -m644 "${_sdrplay_arch}/libsdrplay_api.so.${_apivers}" "/usr/lib/libsdrplay_api.so.${_apivers}" && \
+    install -D -m755 "${_sdrplay_arch}/sdrplay_apiService" /usr/bin/sdrplay_apiService && \
     install -D -m644 inc/sdrplay_api.h "/usr/include/sdrplay_api.h" && \
     install -D -m644 inc/sdrplay_api_callback.h "/usr/include/sdrplay_api_callback.h" && \
     install -D -m644 inc/sdrplay_api_control.h "/usr/include/sdrplay_api_control.h" && \
@@ -43,8 +79,25 @@ RUN git clone https://github.com/pothosware/SoapySDRPlay3.git /tmp/SoapySDRPlay3
 ARG S6_OVERLAY_VERSION=3.1.6.0
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
 RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz /tmp
-RUN tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz
+RUN \
+    case ${TARGETARCH} in \
+        amd64) \
+            filename="s6-overlay-x86_64.tar.xz" \
+            ;; \
+        arm64) \
+            filename="s6-overlay-aarch64.tar.xz" \
+            ;; \
+        arm) \
+            filename="s6-overlay-arm.tar.xz" \
+            ;; \
+        *) \
+            echo "Unknown target arch: ${TARGETARCH}" \
+            exit 1 \
+            ;; \
+    esac && \
+    curl -fSsL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/${filename} -o /tmp/${filename} && \
+    tar -C / -Jxpf /tmp/${filename} && \
+    rm -rf /tmp/${filename}
 
 RUN <<__DOCKER__EOF__
 mkdir -p /etc/s6-overlay/s6-rc.d/sdrplay_apiService/dependencies.d /etc/s6-overlay/s6-rc.d/trunk-recorder/dependencies.d

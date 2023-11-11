@@ -15,8 +15,9 @@ env:
   REGISTRY: ghcr.io
   BASE_IMAGE_NAME: ${{ github.repository }}
   PROMETHEUS_IMAGE_NAME: ${{ github.repository }}-prometheus
+  PROMETHEUS_BASE_IMAGE: ghcr.io/usa-reddragon/trunk-recorder-prometheus
   # renovate: datasource=docker depName=ghcr.io/usa-reddragon/trunk-recorder-prometheus
-  PROMETHEUS_BASE_IMAGE: ghcr.io/usa-reddragon/trunk-recorder-prometheus:main@sha256:5849b45418326c5f594d5371cd1f50d3505fc4301878987bfeab7447c688fe53
+  PROMETHEUS_BASE_IMAGE_TAG: main@sha256:5849b45418326c5f594d5371cd1f50d3505fc4301878987bfeab7447c688fe53
 
 jobs:
   build-and-push-base-image:
@@ -115,7 +116,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           build-args: |
-            BASE_IMAGE=${{ env.PROMETHEUS_BASE_IMAGE }}
+            BASE_IMAGE=${{ env.PROMETHEUS_BASE_IMAGE }}:${{ env.PROMETHEUS_BASE_IMAGE_TAG }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -129,7 +130,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: false
           build-args: |
-            BASE_IMAGE=${{ env.PROMETHEUS_BASE_IMAGE }}
+            BASE_IMAGE=${{ env.PROMETHEUS_BASE_IMAGE }}:${{ env.PROMETHEUS_BASE_IMAGE_TAG }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

@@ -63,7 +63,9 @@ RUN PLATFORM=$(echo ${TARGETPLATFORM} | awk -F/ '{print $1}') && \
     cd - && \
     rm -rf /tmp/sdrplay.run /tmp/sdrplay
 
-RUN git clone https://github.com/pothosware/SoapySDRPlay3.git /tmp/SoapySDRPlay3 && \
+# renovate: datasource=github-tags depName=pothosware/SoapySDRPlay3
+ARG SOAPYSDRPLAY3_VERSION=soapy-sdrplay3-0.4.2
+RUN git clone https://github.com/pothosware/SoapySDRPlay3.git -b ${SOAPYSDRPLAY3_VERSION} /tmp/SoapySDRPlay3 && \
     OLDPWD=$(pwd) && \
     cd /tmp/SoapySDRPlay3 && \
     mkdir build && \
@@ -75,9 +77,9 @@ RUN git clone https://github.com/pothosware/SoapySDRPlay3.git /tmp/SoapySDRPlay3
     cd "${OLDPWD}" && \
     rm -rf /tmp/SoapySDRPlay3
 
-
-ARG S6_OVERLAY_VERSION=3.1.6.0
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
+# renovate: datasource=github-releases depName=just-containers/s6-overlay
+ARG S6_OVERLAY_VERSION=v3.1.6.0
+ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
 RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
 RUN \
     case ${TARGETARCH} in \
@@ -95,7 +97,7 @@ RUN \
             exit 1 \
             ;; \
     esac && \
-    curl -fSsL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/${filename} -o /tmp/${filename} && \
+    curl -fSsL https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/${filename} -o /tmp/${filename} && \
     tar -C / -Jxpf /tmp/${filename} && \
     rm -rf /tmp/${filename}
 

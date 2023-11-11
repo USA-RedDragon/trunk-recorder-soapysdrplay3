@@ -15,6 +15,7 @@ env:
   REGISTRY: ghcr.io
   BASE_IMAGE_NAME: ${{ github.repository }}
   PROMETHEUS_IMAGE_NAME: ${{ github.repository }}-prometheus
+  # renovate: datasource=docker depName=ghcr.io/usa-reddragon/trunk-recorder-prometheus
   PROMETHEUS_BASE_IMAGE: ghcr.io/usa-reddragon/trunk-recorder-prometheus:main@sha256:5849b45418326c5f594d5371cd1f50d3505fc4301878987bfeab7447c688fe53
 
 jobs:

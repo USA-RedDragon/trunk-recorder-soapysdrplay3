@@ -1,4 +1,4 @@
-FROM ghcr.io/usa-reddragon/trunk-recorder-prometheus:main@sha256:0194beb32c016c9fbe629523b010f4ea79df0874ffc60a6a9e4fb8c60b81289d
+FROM ghcr.io/usa-reddragon/trunk-recorder-prometheus:main@sha256:5849b45418326c5f594d5371cd1f50d3505fc4301878987bfeab7447c688fe53
 
 RUN curl -fSsL https://www.sdrplay.com/software/SDRplay_RSP_API-Linux-3.07.1.run -o /tmp/sdrplay.run && \
     mkdir -p /tmp/sdrplay && \

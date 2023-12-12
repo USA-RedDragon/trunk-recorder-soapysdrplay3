@@ -17,7 +17,7 @@ env:
   PROMETHEUS_IMAGE_NAME: ${{ github.repository }}-prometheus
   PROMETHEUS_BASE_IMAGE: ghcr.io/usa-reddragon/trunk-recorder-prometheus
   # renovate: datasource=docker depName=ghcr.io/usa-reddragon/trunk-recorder-prometheus
-  PROMETHEUS_BASE_IMAGE_TAG: main@sha256:afe700092fe5f916d186ffec9b6c523ff15e1a941344989a5bd7150ae79b68b7
+  PROMETHEUS_BASE_IMAGE_TAG: v4.7.1
 
 jobs:
   build-and-push-base-image:

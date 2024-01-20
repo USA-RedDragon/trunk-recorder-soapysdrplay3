@@ -20,10 +20,18 @@ jobs:
     with:
       push: ${{ github.event_name != 'pull_request' }}
 
+  vars:
+    runs-on: ubuntu-22.04
+    outputs:
+      base_image_tag: ${{ env.PROMETHEUS_BASE_IMAGE_TAG }}
+    steps:
+      - run: echo "Exposing env vars"
+
   prometheus:
+    needs: [vars]
     uses: USA-RedDragon/reusable-actions/.github/workflows/docker-ci.yaml@v1.0.5
     with:
       push: ${{ github.event_name != 'pull_request' }}
       image-name: ${{ github.repository }}-prometheus
       build-args: |
-        BASE_IMAGE=ghcr.io/usa-reddragon/trunk-recorder-prometheus:${{ env.PROMETHEUS_BASE_IMAGE_TAG }}
+        BASE_IMAGE=ghcr.io/usa-reddragon/trunk-recorder-prometheus:${{ needs.vars.outputs.base_image_tag }}

@@ -20,9 +20,10 @@ jobs:
       contents: read
       packages: write
       security-events: write
-    uses: USA-RedDragon/reusable-actions/.github/workflows/docker-ci.yaml@v1.0.13
+    uses: USA-RedDragon/reusable-actions/.github/workflows/docker-ci.yaml@v1.0.14
     with:
       push: ${{ github.event_name != 'pull_request' }}
+      security-category: base
 
   vars:
     runs-on: ubuntu-22.04
@@ -37,9 +38,10 @@ jobs:
       contents: read
       packages: write
       security-events: write
-    uses: USA-RedDragon/reusable-actions/.github/workflows/docker-ci.yaml@v1.0.13
+    uses: USA-RedDragon/reusable-actions/.github/workflows/docker-ci.yaml@v1.0.14
     with:
       push: ${{ github.event_name != 'pull_request' }}
       image-name: ${{ github.repository }}-prometheus
       build-args: |
         BASE_IMAGE=ghcr.io/usa-reddragon/trunk-recorder-prometheus:${{ needs.vars.outputs.base_image_tag }}
+      security-category: prometheus

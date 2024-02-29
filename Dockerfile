@@ -122,55 +122,10 @@ cat <<__EOF__ > /etc/s6-overlay/s6-rc.d/trunk-recorder/run
 trunk-recorder --config=/app/config.json
 __EOF__
 
-cat <<__EOF__ > /etc/s6-overlay/s6-rc.d/sdrplay_apiService/finish
-#!/bin/bash
+echo -n 5 > /etc/s6-overlay/s6-rc.d/sdrplay_apiService/max-death-tally
+echo -n 5 > /etc/s6-overlay/s6-rc.d/trunk-recorder/max-death-tally
 
-# Check if /tmp/sdrplay_apiService-stops exists
-if [ -f /tmp/sdrplay_apiService-stops ]; then
-    # If it does, then we need to grab the count out of it
-    _count=\$(cat /tmp/sdrplay_apiService-stops)
-    # If the count is greater than 0, then we need to decrement it and write it back
-    if [ \$_count -gt 0 ]; then
-        _count=\$((_count-1))
-        echo \$_count > /tmp/sdrplay_apiService-stops
-        # If the count is 0, then we need to stop the container
-        if [ \$_count -eq 0 ]; then
-            echo "sdrplay_apiService has stopped 5 times, stopping container"
-            echo 1 > /run/s6-linux-init-container-results/exitcode
-            /run/s6/basedir/bin/halt
-        fi
-    fi
-else
-    # If the file doesnt exist, then we need to create it and write 5 to it
-    echo 5 > /tmp/sdrplay_apiService-stops
-fi
-__EOF__
-
-cat <<__EOF__ > /etc/s6-overlay/s6-rc.d/trunk-recorder/finish
-#!/bin/bash
-
-# Check if /tmp/trunk-recorder-stops exists
-if [ -f /tmp/trunk-recorder-stops ]; then
-    # If it does, then we need to grab the count out of it
-    _count=\$(cat /tmp/trunk-recorder-stops)
-    # If the count is greater than 0, then we need to decrement it and write it back
-    if [ \$_count -gt 0 ]; then
-        _count=\$((_count-1))
-        echo \$_count > /tmp/trunk-recorder-stops
-        # If the count is 0, then we need to stop the container
-        if [ \$_count -eq 0 ]; then
-            echo "trunk-recorder has stopped 5 times, stopping container"
-            echo 1 > /run/s6-linux-init-container-results/exitcode
-            /run/s6/basedir/bin/halt
-        fi
-    fi
-else
-    # If the file doesnt exist, then we need to create it and write 5 to it
-    echo 5 > /tmp/trunk-recorder-stops
-fi
-__EOF__
-
-chmod +x /etc/s6-overlay/s6-rc.d/*/run /etc/s6-overlay/s6-rc.d/*/finish
+chmod +x /etc/s6-overlay/s6-rc.d/*/run
 __DOCKER__EOF__
 
 ENV S6_CMD_RECEIVE_SIGNALS=1

@@ -68,7 +68,8 @@ ARG SOAPYSDRPLAY3_VERSION=soapy-sdrplay3-0.4.2
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
     apt-get install --no-install-recommends --no-install-suggests -y \
-      git && \
+      git \
+      cmake && \
     git clone https://github.com/pothosware/SoapySDRPlay3.git -b ${SOAPYSDRPLAY3_VERSION} /tmp/SoapySDRPlay3 && \
     OLDPWD=$(pwd) && \
     cd /tmp/SoapySDRPlay3 && \
@@ -80,6 +81,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     ldconfig && \
     cd "${OLDPWD}" && \
     rm -rf /tmp/SoapySDRPlay3 && \
+    apt-get remove -y cmake git && \
     rm -rf /var/lib/apt/lists/*
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay

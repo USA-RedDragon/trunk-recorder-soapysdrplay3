@@ -66,6 +66,7 @@ RUN PLATFORM=$(echo ${TARGETPLATFORM} | awk -F/ '{print $1}') && \
 # renovate: datasource=github-tags depName=pothosware/SoapySDRPlay3
 ARG SOAPYSDRPLAY3_VERSION=soapy-sdrplay3-0.4.2
 RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
     apt-get install --no-install-recommends --no-install-suggests -y \
       git && \
     git clone https://github.com/pothosware/SoapySDRPlay3.git -b ${SOAPYSDRPLAY3_VERSION} /tmp/SoapySDRPlay3 && \

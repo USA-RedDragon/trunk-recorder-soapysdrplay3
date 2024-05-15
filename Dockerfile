@@ -70,6 +70,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get install --no-install-recommends --no-install-suggests -y \
       git \
       cmake \
+      libsoapysdr-dev \
       build-essential && \
     git clone https://github.com/pothosware/SoapySDRPlay3.git -b ${SOAPYSDRPLAY3_VERSION} /tmp/SoapySDRPlay3 && \
     OLDPWD=$(pwd) && \
@@ -82,7 +83,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     ldconfig && \
     cd "${OLDPWD}" && \
     rm -rf /tmp/SoapySDRPlay3 && \
-    apt-get remove -y cmake git build-essential && \
+    apt-get remove -y libsoapysdr-dev cmake git build-essential && \
     rm -rf /var/lib/apt/lists/*
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay

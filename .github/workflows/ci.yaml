@@ -26,7 +26,7 @@ jobs:
       security-category: base
 
   vars:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       base_image_tag: ${{ env.PROMETHEUS_BASE_IMAGE_TAG }}
     steps:

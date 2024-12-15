@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ghcr.io/robotastic/trunk-recorder:edge@sha256:147f46a1f3965f26b4fc6c6b1bf2ad0dda8a8e0e904cb1e2a7720b417da17254
+ARG BASE_IMAGE=ghcr.io/robotastic/trunk-recorder:edge@sha256:d0299591441159e4c3844668975821a76aa7295340c0bb3b10d0945d67240bb7
 FROM ${BASE_IMAGE}
 
 ARG TARGETPLATFORM
